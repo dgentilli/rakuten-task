@@ -1,3 +1,4 @@
+import ItemRow from '@/components/ListItems/ItemRow';
 import { User } from '@/types/User';
 import React from 'react';
 import {
@@ -10,53 +11,16 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-const DEFAULT_BG_COLOR = '#ffffff';
-
 const Question1 = () => {
   const onPressItem = () => {
     console.log('open item');
   };
 
-  const renderItem = ({ item, index }: { item: User; index: number }) => {
-    const {
-      id,
-      backgroundColor = '',
-      avatar = '',
-      first_name = '',
-      last_name = '',
-      email = '',
-    } = item;
-
+  const renderItem = ({ item }: { item: User }) => {
+    const { id } = item;
     return (
       <TouchableOpacity key={id} onPress={onPressItem}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            backgroundColor: backgroundColor || DEFAULT_BG_COLOR,
-          }}
-        >
-          <Image
-            // To DO: Break this into a separate component
-            // That displays either the large avatar or avatar
-            style={{ width: 100, height: 100 }}
-            source={{ uri: avatar || '' }}
-          />
-          <View
-            style={{
-              flex: 1,
-              paddingLeft: 10,
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'stretch',
-            }}
-          >
-            <Text>
-              {first_name} {last_name}
-            </Text>
-            <Text>{email}</Text>
-          </View>
-        </View>
+        <ItemRow item={item} />
       </TouchableOpacity>
     );
   };
