@@ -1,6 +1,7 @@
+import ItemGrid from '@/components/ListItems/ItemGrid';
 import ItemRow from '@/components/ListItems/ItemRow';
 import { User } from '@/types/User';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -12,15 +13,21 @@ import {
 } from 'react-native';
 
 const Question1 = () => {
+  const [layout, setLayout] = useState<'list' | 'grid'>('list');
+
   const onPressItem = () => {
     console.log('open item');
   };
+
+  const getNumColumns = useCallback(() => {
+    return layout === 'list' ? 1 : 2;
+  }, [layout]);
 
   const renderItem = ({ item }: { item: User }) => {
     const { id } = item;
     return (
       <TouchableOpacity key={id} onPress={onPressItem}>
-        <ItemRow item={item} />
+        {layout === 'list' ? <ItemRow item={item} /> : <ItemGrid item={item} />}
       </TouchableOpacity>
     );
   };
@@ -54,15 +61,21 @@ const Question1 = () => {
             }}
           >
             {/* // Grid mode */}
-            <Image
-              style={{ width: 30, height: 10 }}
-              source={require('../assets/images/grid.png')}
-            />
+            <TouchableOpacity onPress={() => setLayout('grid')}>
+              <Image
+                style={{ width: 30, height: 10 }}
+                source={require('../assets/images/grid.png')}
+              />
+            </TouchableOpacity>
+
             {/* // List mode */}
-            <Image
-              style={{ width: 30, height: 30 }}
-              source={require('../assets/images/list.png')}
-            />
+            <TouchableOpacity onPress={() => setLayout('list')}>
+              <Image
+                style={{ width: 30, height: 30 }}
+                source={require('../assets/images/list.png')}
+              />
+            </TouchableOpacity>
+
             {/* // Sort last Name A-Z */}
             <Image
               style={{ width: 30, height: 30 }}
@@ -81,9 +94,12 @@ const Question1 = () => {
           </View>
         </View>
         <FlatList
+          style={{ marginTop: 15 }}
           contentContainerStyle={styles.list}
           data={require('../assets/MOCK_DATA.json')}
           renderItem={renderItem}
+          numColumns={getNumColumns()}
+          key={layout}
         />
       </SafeAreaView>
     </View>
@@ -97,6 +113,9 @@ const styles = StyleSheet.create({
   },
   list: {
     justifyContent: 'center',
+    alignItems: 'center',
+    // maxWidth: '100%',
+    marginHorizontal: 5,
   },
   bar: {},
 });
