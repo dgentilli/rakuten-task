@@ -1,8 +1,16 @@
 import { Colors } from '@/constants/Colors';
 import { User } from '@/types/User';
-import { Image, Text, useWindowDimensions, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 const DEFAULT_BG_COLOR = Colors.light.background;
+const ITEM_PADDING = 10;
+const ITEM_MARGIN = 4;
 
 const ItemGrid = ({ item }: { item: User }) => {
   const {
@@ -13,41 +21,53 @@ const ItemGrid = ({ item }: { item: User }) => {
     email = '',
   } = item;
   const { width } = useWindowDimensions();
+  const itemWidth = width / 2 - (ITEM_MARGIN + ITEM_PADDING);
 
   return (
     <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: width / 2,
-        padding: 10,
-        margin: 5,
-        backgroundColor: backgroundColor || DEFAULT_BG_COLOR,
-      }}
+      style={[
+        styles.wrapper,
+        {
+          width: itemWidth,
+          padding: ITEM_PADDING,
+          margin: ITEM_MARGIN,
+          backgroundColor: backgroundColor || DEFAULT_BG_COLOR,
+        },
+      ]}
     >
-      <Image
-        // To DO: Break this into a separate component
-        // That displays either the large avatar or avatar
-        style={{ width: 100, height: 100 }}
-        source={{ uri: avatar || '' }}
-      />
-      <View
-        style={{
-          flex: 1,
-          paddingLeft: 10,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'stretch',
-        }}
-      >
-        <Text>
+      <Image style={styles.avatar} source={{ uri: avatar || '' }} />
+      <View style={styles.textWrapper}>
+        <Text numberOfLines={1} style={styles.text}>
           {first_name} {last_name}
         </Text>
-        <Text>{email}</Text>
+        <Text numberOfLines={1} style={styles.text}>
+          {email}
+        </Text>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  textWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  text: {
+    textAlign: 'center',
+  },
+  avatar: {
+    height: 100,
+    width: '100%',
+    marginBottom: 10,
+  },
+});
 
 export default ItemGrid;

@@ -33,37 +33,15 @@ const Question1 = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        <View
-          style={{
-            height: 60,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 20,
-              fontWeight: 'bold',
-              paddingTop: 20,
-            }}
-          >
-            User List
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.listWrapper}>
+        <View style={styles.header}>
+          <Text style={styles.headerLeft}>User List</Text>
+          <View style={styles.headerRight}>
             {/* // Grid mode */}
             <TouchableOpacity onPress={() => setLayout('grid')}>
               <Image
-                style={{ width: 30, height: 10 }}
+                style={styles.headerRightItem}
                 source={require('../assets/images/grid.png')}
               />
             </TouchableOpacity>
@@ -71,51 +49,74 @@ const Question1 = () => {
             {/* // List mode */}
             <TouchableOpacity onPress={() => setLayout('list')}>
               <Image
-                style={{ width: 30, height: 30 }}
+                style={styles.headerRightItem}
                 source={require('../assets/images/list.png')}
               />
             </TouchableOpacity>
 
             {/* // Sort last Name A-Z */}
             <Image
-              style={{ width: 30, height: 30 }}
+              style={styles.headerRightItem}
               source={require('../assets/images/sort_az.png')}
             />
             {/* // Sort last Name Z-A */}
             <Image
-              style={{ width: 30, height: 30 }}
+              style={styles.headerRightItem}
               source={require('../assets/images/sort_za.png')}
             />
             {/* // Only show elements that have large avatars */}
             <Image
-              style={{ width: 30, height: 30 }}
+              style={styles.headerRightItem}
               source={require('../assets/images/avatar.png')}
             />
           </View>
         </View>
         <FlatList
-          style={{ marginTop: 15 }}
           contentContainerStyle={styles.list}
           data={require('../assets/MOCK_DATA.json')}
           renderItem={renderItem}
           numColumns={getNumColumns()}
           key={layout}
         />
-      </SafeAreaView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeAreaWrapper: {
+    flex: 1,
+  },
+  listWrapper: {
     flex: 1,
     backgroundColor: '#F5FCFF',
+  },
+  header: {
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginTop: 8,
+  },
+  headerLeft: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingTop: 20,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerRightItem: {
+    width: 30,
+    height: 30,
   },
   list: {
     justifyContent: 'center',
     alignItems: 'center',
-    // maxWidth: '100%',
-    marginHorizontal: 5,
   },
   bar: {},
 });
