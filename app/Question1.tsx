@@ -69,6 +69,13 @@ const Question1 = () => {
     setData(tempData);
   }, [mockData]);
 
+  const onPressFilterByAvatarLarge = useCallback(() => {
+    const filteredData = data.filter((user: User) =>
+      Boolean(user.avatar_large)
+    );
+    setData(filteredData);
+  }, [data]);
+
   const renderItem = ({ item }: { item: User }) => {
     const { id } = item;
     return (
@@ -117,10 +124,12 @@ const Question1 = () => {
             </TouchableOpacity>
 
             {/* // Only show elements that have large avatars */}
-            <Image
-              style={styles.headerRightItem}
-              source={require('../assets/images/avatar.png')}
-            />
+            <TouchableOpacity onPress={onPressFilterByAvatarLarge}>
+              <Image
+                style={styles.headerRightItem}
+                source={require('../assets/images/avatar.png')}
+              />
+            </TouchableOpacity>
           </View>
         </View>
         <FlatList
