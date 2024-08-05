@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 
 const Question1 = () => {
-  const [layout, setLayout] = useState<'list' | 'grid'>('list');
   const mockData = require('../assets/MOCK_DATA.json');
+  const [layout, setLayout] = useState<'list' | 'grid'>('list');
   const [data, setData] = useState(mockData);
 
   const onPressItem = () => {
@@ -36,45 +36,36 @@ const Question1 = () => {
     if (!a.last_name && !b.last_name) return 0; // Both missing, equal
     if (!a.last_name) return 1; // a is missing last name, so it comes after b
     if (!b.last_name) return -1; // b is missing last name, so it comes after a
+    return undefined;
   };
 
-  const compareAscending = useCallback((a: User, b: User) => {
+  const compareLastName = (a: User, b: User, order: 'asc' | 'desc') => {
     const missingHandlingResult = handleMissingLastName(a, b);
-    if (missingHandlingResult) return missingHandlingResult;
+    if (missingHandlingResult !== undefined) return missingHandlingResult;
 
-    /** I normally avoid type assertions, but in this case our handleMissingLastName
-     *  function will return either 0, 1, or -1 if the last name is null;
-     *  So we know we'll have a string to work with
-     */
-    const aLastName = a.last_name as string;
-    const bLastName = b.last_name as string;
+    const aLastName = a.last_name ?? '';
+    const bLastName = b.last_name ?? '';
 
-    if (aLastName < bLastName) return -1;
-    if (aLastName > bLastName) return 1;
+    if (order === 'asc') {
+      if (aLastName < bLastName) return -1;
+      if (aLastName > bLastName) return 1;
+    } else if (order === 'desc') {
+      if (aLastName < bLastName) return 1;
+      if (aLastName > bLastName) return -1;
+    }
+
     return 0;
-  }, []);
-
-  const compareDescending = useCallback((a: User, b: User) => {
-    const missingHandlingResult = handleMissingLastName(a, b);
-    if (missingHandlingResult) return missingHandlingResult;
-
-    const aLastName = a.last_name as string;
-    const bLastName = b.last_name as string;
-
-    if (aLastName < bLastName) return 1;
-    if (aLastName > bLastName) return -1;
-    return 0;
-  }, []);
+  };
 
   const onPressSortAscending = useCallback(() => {
     let tempData = mockData.map((user: User) => ({ ...user }));
-    tempData.sort((a: User, b: User) => compareAscending(a, b));
+    tempData.sort((a: User, b: User) => compareLastName(a, b, 'asc'));
     setData(tempData);
   }, [mockData]);
 
   const onPressSortDescending = useCallback(() => {
     let tempData = mockData.map((user: User) => ({ ...user }));
-    tempData.sort((a: User, b: User) => compareDescending(a, b));
+    tempData.sort((a: User, b: User) => compareLastName(a, b, 'desc'));
     setData(tempData);
   }, [mockData]);
 
