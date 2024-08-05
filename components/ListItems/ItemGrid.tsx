@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 
 const DEFAULT_BG_COLOR = Colors.light.background;
+const DEFAULT_AVATAR_URI =
+  'https://robohash.org/quosrerumnisi.jpg?size=200x200&set=set1';
 const ITEM_PADDING = 10;
 const ITEM_MARGIN = 4;
 
@@ -35,7 +37,10 @@ const ItemGrid = ({ item }: { item: User }) => {
         },
       ]}
     >
-      <Image style={styles.avatar} source={{ uri: avatar || '' }} />
+      <Image
+        style={styles.avatar}
+        source={{ uri: avatar || DEFAULT_AVATAR_URI }}
+      />
       <View style={styles.textWrapper}>
         <Text numberOfLines={1} style={styles.text}>
           {first_name} {last_name}

@@ -3,6 +3,8 @@ import { User } from '@/types/User';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 const DEFAULT_BG_COLOR = Colors.light.background;
+const DEFAULT_AVATAR_URI =
+  'https://robohash.org/quosrerumnisi.jpg?size=200x200&set=set1';
 
 const ItemRow = ({ item }: { item: User }) => {
   const {
@@ -20,7 +22,10 @@ const ItemRow = ({ item }: { item: User }) => {
         { backgroundColor: backgroundColor || DEFAULT_BG_COLOR },
       ]}
     >
-      <Image style={styles.avatar} source={{ uri: avatar || '' }} />
+      <Image
+        style={styles.avatar}
+        source={{ uri: avatar || DEFAULT_AVATAR_URI }}
+      />
       <View style={styles.textWrapper}>
         <Text numberOfLines={1}>
           {first_name} {last_name}
