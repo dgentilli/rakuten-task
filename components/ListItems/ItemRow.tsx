@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import { User } from '@/types/User';
-import { Image, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 const DEFAULT_BG_COLOR = Colors.light.background;
 
@@ -15,34 +15,38 @@ const ItemRow = ({ item }: { item: User }) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: backgroundColor || DEFAULT_BG_COLOR,
-      }}
+      style={[
+        styles.wrapper,
+        { backgroundColor: backgroundColor || DEFAULT_BG_COLOR },
+      ]}
     >
-      <Image
-        // To DO: Break this into a separate component
-        // That displays either the large avatar or avatar
-        style={{ width: 100, height: 100 }}
-        source={{ uri: avatar || '' }}
-      />
-      <View
-        style={{
-          flex: 1,
-          paddingLeft: 10,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'stretch',
-        }}
-      >
-        <Text>
+      <Image style={styles.avatar} source={{ uri: avatar || '' }} />
+      <View style={styles.textWrapper}>
+        <Text numberOfLines={1}>
           {first_name} {last_name}
         </Text>
-        <Text>{email}</Text>
+        <Text numberOfLines={1}>{email}</Text>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+  },
+  textWrapper: {
+    flex: 1,
+    paddingLeft: 10,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+});
 
 export default ItemRow;
