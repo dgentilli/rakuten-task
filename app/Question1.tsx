@@ -18,7 +18,13 @@ import {
 
 const Question1 = () => {
   const [layout, setLayout] = useState<'list' | 'grid'>('list');
-  const { data: apiData, isLoading, error, fetchPageData } = useFetchUsers();
+  const {
+    data: apiData,
+    isLoading,
+    isFetchingData,
+    error,
+    fetchPageData,
+  } = useFetchUsers();
   const [data, setData] = useState<User[]>(apiData);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [showOnlyLargeAvatar, setShowOnlyLargeAvatar] = useState(false);
@@ -102,66 +108,73 @@ const Question1 = () => {
     );
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.listWrapper}>
-        <View style={styles.header}>
-          <Text style={styles.headerLeft}>User List</Text>
-          <View style={styles.headerRight}>
-            {/* // Grid mode */}
-            <TouchableOpacity onPress={() => setLayout('grid')}>
-              <Image
-                style={styles.headerRightItem}
-                source={require('../assets/images/grid.png')}
-              />
-            </TouchableOpacity>
+  const renderContent = () => {
+    if (isLoading) return <ActivityIndicator />;
+    if (error) return <Text>{error}</Text>;
 
-            {/* // List mode */}
-            <TouchableOpacity onPress={() => setLayout('list')}>
-              <Image
-                style={styles.headerRightItem}
-                source={require('../assets/images/list.png')}
-              />
-            </TouchableOpacity>
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.listWrapper}>
+          <View style={styles.header}>
+            <Text style={styles.headerLeft}>User List</Text>
+            <View style={styles.headerRight}>
+              {/* // Grid mode */}
+              <TouchableOpacity onPress={() => setLayout('grid')}>
+                <Image
+                  style={styles.headerRightItem}
+                  source={require('../assets/images/grid.png')}
+                />
+              </TouchableOpacity>
 
-            {/* // Sort last Name A-Z */}
-            <TouchableOpacity onPress={onPressSortAscending}>
-              <Image
-                style={styles.headerRightItem}
-                source={require('../assets/images/sort_az.png')}
-              />
-            </TouchableOpacity>
+              {/* // List mode */}
+              <TouchableOpacity onPress={() => setLayout('list')}>
+                <Image
+                  style={styles.headerRightItem}
+                  source={require('../assets/images/list.png')}
+                />
+              </TouchableOpacity>
 
-            {/* // Sort last Name Z-A */}
-            <TouchableOpacity onPress={onPressSortDescending}>
-              <Image
-                style={styles.headerRightItem}
-                source={require('../assets/images/sort_za.png')}
-              />
-            </TouchableOpacity>
+              {/* // Sort last Name A-Z */}
+              <TouchableOpacity onPress={onPressSortAscending}>
+                <Image
+                  style={styles.headerRightItem}
+                  source={require('../assets/images/sort_az.png')}
+                />
+              </TouchableOpacity>
 
-            {/* // Only show elements that have large avatars */}
-            <TouchableOpacity onPress={onPressFilterByAvatarLarge}>
-              <Image
-                style={styles.headerRightItem}
-                source={require('../assets/images/avatar.png')}
-              />
-            </TouchableOpacity>
+              {/* // Sort last Name Z-A */}
+              <TouchableOpacity onPress={onPressSortDescending}>
+                <Image
+                  style={styles.headerRightItem}
+                  source={require('../assets/images/sort_za.png')}
+                />
+              </TouchableOpacity>
+
+              {/* // Only show elements that have large avatars */}
+              <TouchableOpacity onPress={onPressFilterByAvatarLarge}>
+                <Image
+                  style={styles.headerRightItem}
+                  source={require('../assets/images/avatar.png')}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
+          <FlatList
+            contentContainerStyle={getContentContainerStyle()}
+            data={data}
+            renderItem={renderItem}
+            numColumns={getNumColumns()}
+            key={layout}
+            onEndReached={fetchPageData}
+            ListFooterComponent={isFetchingData ? <ActivityIndicator /> : null}
+            ListEmptyComponent={<Text>No Items Available...</Text>}
+          />
         </View>
-        <FlatList
-          contentContainerStyle={getContentContainerStyle()}
-          data={data}
-          renderItem={renderItem}
-          numColumns={getNumColumns()}
-          key={layout}
-          onEndReached={fetchPageData}
-          ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
-          ListEmptyComponent={<Text>No Items Available...</Text>}
-        />
-      </View>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  };
+
+  return renderContent();
 };
 
 const styles = StyleSheet.create({

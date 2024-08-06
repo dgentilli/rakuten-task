@@ -68,6 +68,7 @@ const useFetchUsers = () => {
   return {
     data,
     isLoading,
+    isFetchingData,
     error,
     fetchPageData,
   };
