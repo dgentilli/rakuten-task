@@ -98,15 +98,22 @@ const Question1 = () => {
     applyFilterAndSorting();
   }, [apiData, showOnlyLargeAvatar, sortOrder]);
 
-  const renderItem = ({ item }: { item: User }) => {
-    const { id } = item;
+  const renderItem = useCallback(
+    ({ item }: { item: User }) => {
+      const { id } = item;
 
-    return (
-      <TouchableOpacity key={id} onPress={onPressItem}>
-        {layout === 'list' ? <ItemRow item={item} /> : <ItemGrid item={item} />}
-      </TouchableOpacity>
-    );
-  };
+      return (
+        <TouchableOpacity key={id} onPress={onPressItem}>
+          {layout === 'list' ? (
+            <ItemRow item={item} />
+          ) : (
+            <ItemGrid item={item} />
+          )}
+        </TouchableOpacity>
+      );
+    },
+    [layout, onPressItem]
+  );
 
   const renderContent = () => {
     if (isLoading) return <ActivityIndicator />;
